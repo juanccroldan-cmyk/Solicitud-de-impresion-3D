@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Solicitud de impresión 3D | SI3</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Inter+Tight:wght@600;700&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<style>
+html,body{margin:0}[hidden]{display:none!important}img{max-width:100%}
+/* Layout: columna de trabajo (max 800px) con secciones numeradas como la plantilla; cabecera con marca Si3 y tres pestañas. Paleta tomada de si-3.tech (teal, azul, pizarra). */
+:root{
+  --bg:#f0f5fa; --panel:#ffffff; --ink:#1e293b; --text:#334155; --muted:#5b6b80; --line:#d1d5db;
+  --accent:#0f8f86; --accent-ink:#ffffff; --accent-soft:#e8f8f6; --blue:#2f66d0; --logo:#3a7bc8;
+  --ok:#2b8a3e; --warn:#a86b00; --bad:#c92a2a;
+  --chip:#e6edf3; --field:#f8fafc;
+  --f-display:"Inter Tight","Inter",Arial,sans-serif;
+  --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e161b; --panel:#15212a; --ink:#e8eef2; --text:#cbd5df; --muted:#93a3b3; --line:#2a3a46;
+  --accent:#5fd9c8; --accent-ink:#06302c; --accent-soft:#123532; --blue:#86a9f0; --logo:#7fb0ea;
+  --ok:#5cc46f; --warn:#e3b23c; --bad:#ff6b6b;
+  --chip:#1f2e38; --field:#111b22; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e161b; --panel:#15212a; --ink:#e8eef2; --text:#cbd5df; --muted:#93a3b3; --line:#2a3a46;
+  --accent:#5fd9c8; --accent-ink:#06302c; --accent-soft:#123532; --blue:#86a9f0; --logo:#7fb0ea;
+  --ok:#5cc46f; --warn:#e3b23c; --bad:#ff6b6b;
+  --chip:#1f2e38; --field:#111b22; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:800px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+header{display:flex;flex-direction:column;gap:14px;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.mark{display:block;width:78px;height:40px;flex:none;background:var(--logo);-webkit-mask:url(data:image/png;base64,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) center/contain no-repeat;mask:url(data:image/png;base64,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) center/contain no-repeat}
+.teams{background:#4b53bc;color:#fff;border-color:#4b53bc}
+.brand-t{display:flex;flex-direction:column;min-width:0}
+h1{font-family:var(--f-display);font-weight:700;font-size:1.65rem;line-height:1.1;margin:0;color:var(--ink);text-wrap:balance}
+.brand small{font-size:.8rem;color:var(--muted)}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.tab{font:600 .92rem var(--f-body);padding:9px 14px;border:0;border-bottom:3px solid transparent;background:none;color:var(--muted);cursor:pointer;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible,.opt input:focus-visible+span{outline:2px solid var(--blue);outline-offset:2px}
+.notice{font-size:.85rem;color:var(--muted);background:var(--panel);border:1px dashed var(--line);border-radius:8px;padding:10px 12px}
+.notice.draft{border-style:solid;border-color:var(--accent);background:var(--accent-soft);color:var(--ink);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+section.block{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:16px}
+form{display:flex;flex-direction:column;gap:14px}
+.sec-h{display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.sec-h b{font-family:var(--f-mono);font-size:.78rem;color:var(--accent)}
+.sec-h h2{font-family:var(--f-display);font-weight:600;font-size:1.15rem;margin:0;color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f.full{grid-column:1/-1}
+.l{font-weight:600;font-size:.88rem;color:var(--ink)}
+.req{color:var(--accent)}
+.hint{font-size:.8rem;color:var(--muted)}
+input[type=text],input[type=email],input[type=number],input[type=date],input[type=url],select,textarea{
+  font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:9px 10px;width:100%;min-width:0}
+textarea{min-height:88px;resize:vertical}
+.bad-field{border-color:var(--bad)!important;box-shadow:0 0 0 1px var(--bad)}
+.opts.bad-field{box-shadow:none;border:1px solid var(--bad);border-radius:8px;padding:6px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt span{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:var(--chip);border:1px solid transparent;cursor:pointer;font-size:.88rem;color:var(--ink);user-select:none}
+.opt span em{font-style:normal;font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
+.opt input:checked+span{background:var(--accent-soft);border-color:var(--accent)}
+.opt input:checked+span em{color:var(--ink)}
+.cond{display:flex;flex-direction:column;gap:6px}
+.err{color:var(--bad);font-size:.82rem}
+.inline{display:flex;align-items:center;gap:8px;font-size:.88rem}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{font:600 .95rem var(--f-body);padding:10px 16px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.btn.sm{padding:6px 11px;font-size:.84rem}
+.done{border:2px solid var(--accent);background:var(--panel);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.code{font-family:var(--f-mono);font-weight:600;color:var(--ink)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.toolbar select,.toolbar input[type=text]{width:auto;flex:1 1 150px}
+.list{display:flex;flex-direction:column;gap:8px}
+.item{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.item>button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;width:100%;padding:12px 14px;cursor:pointer}
+.item>button:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.item .t{font-weight:600;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.item .m{grid-column:2/4;font-size:.8rem;color:var(--muted);min-width:0;overflow-wrap:anywhere}
+.late{color:var(--bad);font-weight:600}
+.stripe{width:5px;align-self:stretch;border-radius:3px;grid-row:1/3}
+.pill{font-family:var(--f-mono);font-size:.7rem;padding:3px 8px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.s-recibida{color:var(--blue)} .s-evaluacion{color:var(--warn)} .s-impresion{color:var(--accent)}
+.s-lista{color:var(--ok)} .s-entregada{color:var(--muted)} .s-rechazada{color:var(--bad)}
+.bg-recibida{background:var(--blue)} .bg-evaluacion{background:var(--warn)} .bg-impresion{background:var(--accent)}
+.bg-lista{background:var(--ok)} .bg-entregada{background:var(--muted)} .bg-rechazada{background:var(--bad)}
+.detail{border-top:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:14px}
+dl{display:grid;grid-template-columns:minmax(120px,180px) 1fr;gap:6px 14px;margin:0;font-size:.88rem}
+dt{color:var(--muted)} dd{margin:0;min-width:0;overflow-wrap:anywhere;color:var(--ink)}
+@media (max-width:480px){dl{grid-template-columns:1fr}dt{margin-top:6px}}
+.timeline{list-style:none;margin:0;padding:0 0 0 14px;border-left:2px solid var(--line);display:flex;flex-direction:column;gap:6px;font-size:.84rem}
+.timeline li{position:relative}
+.timeline li::before{content:"";position:absolute;left:-20px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--panel);border:2px solid var(--accent)}
+.admin{background:var(--field);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.admin h3,.sub-h{margin:0;font-family:var(--f-display);font-size:.95rem;color:var(--ink)}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);background:var(--panel);border:1px dashed var(--line);border-radius:10px}
+.counts{display:flex;gap:6px;flex-wrap:wrap}
+.counts .pill{background:var(--panel)}
+a{color:var(--blue)}
+/* indicadores */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi b{font-family:var(--f-display);font-size:1.6rem;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.15}
+.kpi span{font-size:.78rem;color:var(--muted)}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:minmax(90px,170px) 1fr 36px;gap:10px;align-items:center;font-size:.85rem}
+.bar .n{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.bar .track{height:10px;background:var(--chip);border-radius:5px;overflow:hidden}
+.bar .fill{height:100%;background:var(--accent);border-radius:5px}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-size:.78rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="brand">
+<span aria-label="Si3" class="mark" role="img"></span>
+<div class="brand-t"><h1>Solicitud de impresión 3D</h1><small>Taller · Si-Plásticos · Si-Ensambles · Iberotech</small></div>
+</div>
+<p class="notice draft" hidden id="ok-envio" role="status">Solicitud enviada. El taller la recibió por correo y le confirmará material y fecha de entrega.</p>
+<p class="notice">Diligencie la información de la pieza y adjunte los archivos necesarios. La solicitud será enviada directamente al correo del taller.</p>
+</header>
+<main>
+<form action="https://formsubmit.co/juan.castrillon@si-3.tech" enctype="multipart/form-data" id="frm" method="POST" style="margin-top:12px">
+<input id="asunto" name="_subject" type="hidden" value="Nueva solicitud de impresión 3D - SI3"/>
+<input id="codigo" name="codigo" type="hidden" value=""/>
+<input id="condiciones" name="condiciones_trabajo" type="hidden" value=""/>
+<input id="especialesTxt" name="requisitos_especiales" type="hidden" value=""/>
+<input name="_template" type="hidden" value="table"/>
+<input aria-hidden="true" autocomplete="off" name="_honey" style="display:none" tabindex="-1" type="text"/>
+
+<section class="block">
+<div class="sec-h"><b>01</b><h2>Solicitante</h2></div>
+<div class="grid">
+<div class="f"><label class="l" for="nombre">Nombre <span class="req">*</span></label><input autocomplete="name" id="nombre" name="nombre" required="True" type="text"/></div>
+<div class="f"><label class="l" for="correo">Correo electrónico <span class="req">*</span></label><input autocomplete="email" id="correo" name="email" required="True" type="email"/></div>
+<div class="f"><span class="l">Planta <span class="req">*</span></span><div class="opts" id="planta">
+<label class="opt"><input name="planta" required="True" type="radio" value="Si-Plásticos"/><span>Si-Plásticos</span></label>
+<label class="opt"><input name="planta" type="radio" value="Si-Ensambles"/><span>Si-Ensambles</span></label>
+<label class="opt"><input name="planta" type="radio" value="Iberotech"/><span>Iberotech</span></label>
+</div></div>
+<div class="f"><label class="l" for="area">Área o departamento <span class="req">*</span></label><input id="area" list="dl-area" name="area" placeholder="Escriba o elija" required="True" type="text"/><datalist id="dl-area"><option value="Producción"></option><option value="Mantenimiento"></option><option value="Calidad"></option><option value="Ingeniería"></option><option value="Logística"></option><option value="Taller"></option><option value="Seguridad y salud en el trabajo"></option></datalist></div>
+</div>
+<div class="f">
+<span class="l">Prioridad <span class="req">*</span></span>
+<div class="opts" id="prioridad">
+<label class="opt"><input checked="" name="prioridad" type="radio" value="Normal"/><span>Normal</span></label>
+<label class="opt"><input name="prioridad" type="radio" value="Alta"/><span>Alta <em>afecta producción</em></span></label>
+<label class="opt"><input name="prioridad" type="radio" value="Crítica"/><span>Crítica <em>línea o equipo detenido</em></span></label>
+</div>
+</div>
+<div class="grid">
+<div class="f"><label class="l" for="fechaLimite">Fecha límite requerida</label><input id="fechaLimite" name="fecha_limite" required="True" type="date"/><span class="hint">Fecha en que la necesita. La entrega la confirma el taller según la cola y el tiempo real de impresión.</span></div>
+<div class="f" style="justify-content:center"><label class="inline"><input id="sinFecha" name="sin_fecha" type="checkbox" value="Sin fecha específica"/> Sin fecha específica</label></div>
+</div>
+</section>
+<section class="block">
+<div class="sec-h"><b>02</b><h2>Pieza o proyecto</h2></div>
+<div class="grid">
+<div class="f"><label class="l" for="pieza">Nombre de la pieza o proyecto <span class="req">*</span></label><input id="pieza" maxlength="80" name="pieza" placeholder="Título corto" required="True" type="text"/></div>
+<div class="f"><label class="l" for="cantidad">Cantidad de piezas <span class="req">*</span></label><input id="cantidad" min="1" name="cantidad" required="True" step="1" type="number" value="1"/></div>
+</div>
+<div class="f">
+<span class="l">Tipo de uso <span class="req">*</span></span>
+<div class="opts" id="tipoUso">
+<label class="opt"><input name="tipoUso" required="True" type="radio" value="Repuesto o pieza funcional"/><span>Repuesto o pieza funcional</span></label>
+<label class="opt"><input name="tipoUso" type="radio" value="Dispositivo, plantilla o útil"/><span>Dispositivo, plantilla o útil</span></label>
+<label class="opt"><input name="tipoUso" type="radio" value="Prototipo o prueba de forma"/><span>Prototipo o prueba de forma</span></label>
+<label class="opt"><input name="tipoUso" type="radio" value="Señalización u organización"/><span>Señalización u organización</span></label>
+<label class="opt"><input name="tipoUso" type="radio" value="Otro"/><span>Otro</span></label>
+</div>
+</div>
+<div class="f"><label class="l" for="medidas">Medidas aproximadas <span class="hint">(opcional · largo × ancho × alto, mm)</span></label><input id="medidas" name="medidas" placeholder="Ej. 120 × 40 × 25" type="text"/><span class="hint">Impresora del taller: Creality Hi, volumen máximo 260 × 260 × 300 mm. Piezas más grandes se dividen en partes.</span></div>
+<div class="f"><label class="l" for="descripcion">Descripción y uso <span class="req">*</span></label><textarea id="descripcion" name="descripcion" placeholder="Para qué sirve la pieza, dónde se va a montar y qué pasa si falla" required="True"></textarea></div>
+</section>
+<section class="block">
+<div class="sec-h"><b>03</b><h2>Especificaciones técnicas</h2></div>
+<div class="f">
+<span class="l">¿Con qué cuenta para la pieza? <span class="req">*</span></span>
+<div class="opts" id="archivoEstado">
+<label class="opt"><input name="archivoEstado" required="True" type="radio" value="Archivo 3D"/><span>Archivo 3D listo <em>.STL .STEP .3MF</em></span></label>
+<label class="opt"><input name="archivoEstado" type="radio" value="Muestra física"/><span>Muestra física para replicar</span></label>
+<label class="opt"><input name="archivoEstado" type="radio" value="Plano o croquis"/><span>Plano o croquis <em>requiere modelado</em></span></label>
+<label class="opt"><input name="archivoEstado" type="radio" value="Solo la idea"/><span>Solo la idea <em>requiere diseño</em></span></label>
+</div>
+</div>
+<div class="cond" hidden="" id="c-link">
+<label class="l" for="archivoLink">Enlace al archivo 3D <span class="hint">(o adjúntelo abajo)</span></label>
+<input id="archivoLink" name="enlace_archivo_3d" placeholder="https:// (OneDrive, SharePoint, Drive, Onshape…)" type="url"/>
+<span class="hint">Pegue un enlace con permiso de lectura, o adjunte el archivo abajo.</span>
+</div>
+<div class="cond">
+<label class="l" for="adjuntos">Adjuntos (STL, STEP, 3MF, fotos, PDF · máximo combinado 10 MB)</label>
+<input accept=".stl,.step,.stp,.3mf,.obj,.jpg,.jpeg,.png,.webp,.pdf" id="adjuntos" multiple="True" name="attachment" type="file"/>
+<span class="hint">Los archivos se adjuntan al correo. Tamaño máximo combinado: 10 MB por envío.</span>
+</div>
+<div class="f">
+<span class="l">Condiciones de trabajo de la pieza</span>
+<span class="hint">Marque las que apliquen. Con esto el taller define el material si usted no lo tiene claro.</span>
+<div class="opts" id="requisitos">
+<label class="opt"><input type="checkbox" value="Carga mecánica o impacto"/><span>Carga mecánica o impacto</span></label>
+<label class="opt"><input type="checkbox" value="Temperatura alta"/><span>Temperatura alta <em>&gt;60 °C</em></span></label>
+<label class="opt"><input type="checkbox" value="Flexible o elástica"/><span>Flexible o elástica</span></label>
+<label class="opt"><input type="checkbox" value="Contacto con aceites o químicos"/><span>Contacto con aceites o químicos</span></label>
+<label class="opt"><input type="checkbox" value="Intemperie o UV"/><span>Intemperie o UV</span></label>
+<label class="opt"><input type="checkbox" value="Encaje o ensamble con otra pieza"/><span>Encaje o ensamble con otra pieza</span></label>
+<label class="opt"><input type="checkbox" value="Solo apariencia"/><span>Solo apariencia</span></label>
+</div>
+</div>
+<div class="f">
+<span class="l">Material sugerido</span>
+<div class="opts" id="material">
+<label class="opt"><input checked="" name="material" type="radio" value="A criterio del técnico"/><span>A criterio del técnico</span></label>
+<label class="opt"><input name="material" type="radio" value="PETG"/><span>PETG <em>en stock</em></span></label>
+<label class="opt"><input name="material" type="radio" value="PETG-CO"/><span>PETG-CO <em>en stock</em></span></label>
+<label class="opt"><input name="material" type="radio" value="PLA-CO"/><span>PLA-CO <em>en stock</em></span></label>
+<label class="opt"><input name="material" type="radio" value="Otro"/><span>Otro material</span></label>
+</div>
+<input hidden="" id="materialOtro" name="material_otro" placeholder="¿Cuál material? (ABS, ASA, TPU, Nylon…)" type="text"/>
+<span class="hint">Un material que no esté en stock lo debe gestionar o suministrar el área. El taller confirma el material final según las condiciones marcadas.</span>
+</div>
+<div class="f">
+<span class="l">Color</span>
+<div class="opts" id="color">
+<label class="opt"><input checked="" name="color" type="radio" value="Negro"/><span>Negro <em>disponible</em></span></label>
+<label class="opt"><input name="color" type="radio" value="Otro"/><span>Otro color</span></label>
+</div>
+<div class="cond" hidden="" id="c-color">
+<input id="colorOtro" name="color_otro" placeholder="¿Qué color?" type="text"/>
+<span class="hint">Para colores distintos a negro, el área solicitante debe suministrar el filamento.</span>
+</div>
+</div>
+<div class="grid">
+<div class="f">
+<span class="l">Relleno (infill)</span>
+<div class="opts" id="relleno">
+<label class="opt"><input checked="" name="relleno" type="radio" value="A criterio del técnico"/><span>A criterio del técnico</span></label>
+<label class="opt"><input name="relleno" type="radio" value="15–20 %"/><span>Liviano <em>15–20 %</em></span></label>
+<label class="opt"><input name="relleno" type="radio" value="40 %"/><span>Medio <em>40 %</em></span></label>
+<label class="opt"><input name="relleno" type="radio" value="60–100 %"/><span>Robusto <em>60–100 %</em></span></label>
+</div>
+</div>
+<div class="f">
+<span class="l">Altura de capa / calidad</span>
+<div class="opts" id="capa">
+<label class="opt"><input checked="" name="capa" type="radio" value="A criterio del técnico"/><span>A criterio del técnico</span></label>
+<label class="opt"><input name="capa" type="radio" value="Borrador 0.28 mm"/><span>Borrador <em>0.28 mm</em></span></label>
+<label class="opt"><input name="capa" type="radio" value="Estándar 0.20 mm"/><span>Estándar <em>0.20 mm</em></span></label>
+<label class="opt"><input name="capa" type="radio" value="Alta calidad 0.12 mm"/><span>Alta calidad <em>0.12 mm</em></span></label>
+</div>
+<span class="hint">Configuración actual del taller: 0.16 mm.</span>
+</div>
+</div>
+</section>
+<section class="block">
+<div class="sec-h"><b>04</b><h2>Observaciones y requisitos especiales</h2></div>
+<div class="opts" id="especiales">
+<label class="opt"><input type="checkbox" value="Tolerancias ajustadas"/><span>Tolerancias ajustadas</span></label>
+<label class="opt"><input type="checkbox" value="Soportes específicos"/><span>Soportes específicos</span></label>
+<label class="opt"><input type="checkbox" value="Insertos roscados o tuercas embebidas"/><span>Insertos roscados o tuercas</span></label>
+<label class="opt"><input type="checkbox" value="Post-procesado (lijado, pintura)"/><span>Post-procesado</span></label>
+</div>
+<textarea aria-label="Observaciones" id="observaciones" name="observaciones" placeholder="Cotas críticas, ajuste con otra pieza, orientación de impresión, etc."></textarea>
+</section>
+<div class="actions">
+<button class="btn primary" id="enviar" type="submit">Enviar solicitud</button>
+<span class="err" id="form-err" role="alert"></span>
+</div>
+<input id="next" name="_next" type="hidden" value=""/>
+</form>
+<p class="hint" style="text-align:center;margin-top:14px">Al enviar puede aparecer una verificación "No soy un robot" de FormSubmit; complétela para que la solicitud llegue.</p>
+</main>
+</div>
+<script>
+(() => {
+  const form = document.getElementById('frm');
+  const $ = (id) => document.getElementById(id);
+  const error = $('form-err');
+  const fileInput = $('adjuntos');
+  const MAX_TOTAL = 10 * 1024 * 1024;
+
+  function checked(name) {
+    const selected = document.querySelector(`input[name="${name}"]:checked`);
+    return selected ? selected.value : '';
+  }
+
+  function syncConditionalFields() {
+    const sinFecha = $('sinFecha').checked;
+    $('fechaLimite').disabled = sinFecha;
+    $('fechaLimite').required = !sinFecha;
+
+    const has3D = checked('archivoEstado') === 'Archivo 3D';
+    $('c-link').hidden = !has3D;
+    $('archivoLink').disabled = !has3D;
+
+    const otroMaterial = checked('material') === 'Otro';
+    $('materialOtro').hidden = !otroMaterial;
+    $('materialOtro').disabled = !otroMaterial;
+    $('materialOtro').required = otroMaterial;
+
+    const otroColor = checked('color') === 'Otro';
+    $('c-color').hidden = !otroColor;
+    $('colorOtro').disabled = !otroColor;
+    $('colorOtro').required = otroColor;
+  }
+
+  function totalFiles() {
+    return Array.from(fileInput.files || []).reduce((sum, file) => sum + file.size, 0);
+  }
+
+  function formatMB(bytes) {
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  }
+
+  form.addEventListener('change', (e) => {
+    syncConditionalFields();
+    if (error && e.target !== fileInput) error.textContent = '';
+  });
+
+  fileInput.addEventListener('change', () => {
+    const total = totalFiles();
+    if (total > MAX_TOTAL) {
+      error.textContent = `Los archivos seleccionados pesan ${formatMB(total)}. El máximo combinado permitido es 10 MB. Seleccione archivos más pequeños.`;
+    } else {
+      error.textContent = '';
+    }
+  });
+
+  form.addEventListener('submit', (event) => {
+    syncConditionalFields();
+    const total = totalFiles();
+    const has3D = checked('archivoEstado') === 'Archivo 3D';
+    const hasLink = $('archivoLink').value.trim().length > 0;
+    const hasFiles = fileInput.files && fileInput.files.length > 0;
+
+    if (total > MAX_TOTAL) {
+      event.preventDefault();
+      error.textContent = `Los archivos seleccionados pesan ${formatMB(total)}. El máximo combinado permitido es 10 MB.`;
+      fileInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    if (has3D && !hasLink && !hasFiles) {
+      event.preventDefault();
+      error.textContent = 'Para una solicitud con archivo 3D, adjunte el archivo o indique un enlace.';
+      $('archivoLink').focus();
+      return;
+    }
+    error.textContent = '';
+    // Datos que se calculan al enviar
+    const d = new Date(), p = (n) => String(n).padStart(2, '0');
+    const codigo = 'IMP-' + String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate()) + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+    $('codigo').value = codigo;
+    $('asunto').value = 'Solicitud 3D ' + codigo + ' · ' + $('pieza').value.trim() + ' · ' + checked('planta') + ' · ' + checked('prioridad');
+    $('condiciones').value = Array.from(document.querySelectorAll('#requisitos input:checked')).map((i) => i.value).join('; ');
+    $('especialesTxt').value = Array.from(document.querySelectorAll('#especiales input:checked')).map((i) => i.value).join('; ');
+    $('next').value = location.origin + location.pathname + '?enviado=1';
+    const button = $('enviar');
+    button.disabled = true;
+    button.textContent = 'Enviando solicitud…';
+    // No preventDefault: the browser sends the multipart form directly to FormSubmit.
+  });
+
+  const hoy = new Date(); hoy.setMinutes(hoy.getMinutes() - hoy.getTimezoneOffset());
+  $('fechaLimite').min = hoy.toISOString().slice(0, 10);
+
+  // Al volver con el botón Atrás, reactivar el botón de envío
+  window.addEventListener('pageshow', () => { $('enviar').disabled = false; $('enviar').textContent = 'Enviar solicitud'; });
+  // Confirmación al regresar desde FormSubmit
+  if (new URLSearchParams(location.search).get('enviado') === '1') {
+    $('ok-envio').hidden = false;
+    history.replaceState(null, '', location.pathname);
+  }
+  syncConditionalFields();
+})();
+</script>
+</body>
+</html>
