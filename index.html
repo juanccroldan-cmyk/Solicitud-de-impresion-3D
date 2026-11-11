@@ -362,7 +362,7 @@ a{color:var(--blue)}
     const d = new Date(), p = (n) => String(n).padStart(2, '0');
     const codigo = 'IMP-' + String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate()) + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
     $('codigo').value = codigo;
-    $('asunto').value = 'Solicitud 3D ' + codigo + ' · ' + $('pieza').value.trim() + ' · ' + checked('planta') + ' · ' + checked('prioridad');
+    $('asunto').value = 'Solicitud 3D ' + codigo + ' · ' + $('pieza').value.trim() + ' · ' + checked('planta') + ' · ' + checked('prioridad') + ($('sinFecha').checked || !$('fechaLimite').value ? ' · Sin fecha' : ' · Entrega ' + $('fechaLimite').value);
     $('condiciones').value = Array.from(document.querySelectorAll('#requisitos input:checked')).map((i) => i.value).join('; ');
     $('especialesTxt').value = Array.from(document.querySelectorAll('#especiales input:checked')).map((i) => i.value).join('; ');
     $('next').value = location.origin + location.pathname + '?enviado=1';
